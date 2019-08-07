@@ -1,23 +1,30 @@
 package com.example.recyclerdemo.Controller;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.SupportActionModeWrapper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recyclerdemo.Adapter.Rc_Adapter;
+import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Modal.RcModal;
 import com.example.recyclerdemo.R;
 
@@ -40,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lstcategoryData = findViewById(R.id.rc1);
-BottomNavigationView bv= (BottomNavigationView) findViewById(R.id.bnav1);
+//BottomNavigationView bv= (BottomNavigationView) findViewById(R.id.bnav1);
 
-bv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//bv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
               data();
 
@@ -57,10 +64,58 @@ bv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         lstcategoryData.setAdapter(mAdapter);
 
         mAdapter.notifyDataSetChanged();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.btnadd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNoteDialog();
+            }
+        });
+
+
+        lstcategoryData.addOnItemTouchListener(new RecyclerTouchListener(this,
+                lstcategoryData, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                showActionsDialog(position);
+            }
+        }));
     }
 
+      private void showNoteDialog()
+      {
+
+      }
+
+    private void showActionsDialog(final int position) {
+        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose option");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                  //  showNoteDialog(true, notesList.get(position), position);
+                } else {
+                  //  deleteNote(position);
+                }
+            }
+        });
+        builder.show();
+    }
     public void data() {
         cname = new ArrayList<>();
+        cname.add(new RcModal("Food"));
+        cname.add(new RcModal("Friends"));
+        cname.add(new RcModal("Others1"));
+        cname.add(new RcModal("Others2"));
+        cname.add(new RcModal("Others3"));
         cname.add(new RcModal("Food"));
         cname.add(new RcModal("Friends"));
         cname.add(new RcModal("Others1"));
