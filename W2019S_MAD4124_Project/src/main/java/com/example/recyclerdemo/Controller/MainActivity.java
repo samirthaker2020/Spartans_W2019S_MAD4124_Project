@@ -1,5 +1,6 @@
 package com.example.recyclerdemo.Controller;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,6 +91,39 @@ public class MainActivity extends AppCompatActivity {
 
       private void showNoteDialog()
       {
+          int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+          int height = (int)(getResources().getDisplayMetrics().heightPixels*0.50);
+
+
+          final Dialog dialog = new Dialog(this);
+          dialog.setContentView(R.layout.note_dialog);
+          dialog.setTitle("New Category");
+
+
+          // set the custom dialog components - text, image and button
+          TextView newcategory = (TextView) dialog.findViewById(R.id.category);
+            Button btnadd= (Button) dialog.findViewById(R.id.btnadd);
+          Button btncancel= (Button) dialog.findViewById(R.id.btncancel);
+
+
+          btncancel.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  dialog.dismiss();
+              }
+          });
+          btnadd.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+
+              }
+          });
+        //  Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+          // if button is clicked, close the custom dialog
+          dialog.getWindow().setLayout(width, height);
+
+          dialog.show();
+
 
       }
 
