@@ -2,6 +2,7 @@ package com.example.recyclerdemo.Controller;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -17,11 +18,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +29,7 @@ import com.example.recyclerdemo.Adapter.Rc_Adapter;
 import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Modal.RcModal;
 import com.example.recyclerdemo.R;
-import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Database.DatabaseHelper;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +86,21 @@ public class MainActivity extends AppCompatActivity {
                 lstcategoryData, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
+                Intent i = new Intent(MainActivity.this, NotesDetails.class);
+             Note n1=notesList.get(position);
+                int getrec= n1.getId();
+                Log.d("cid",Integer.toString(getrec));
+//Create the bundle
+                Bundle bundle = new Bundle();
+
+//Add your data to bundle
+                bundle.putInt("categoryid", getrec);
+
+//Add the bundle to the intent
+                i.putExtras(bundle);
+
+//Fire that second activity
+                startActivity(i);
             }
 
             @Override
