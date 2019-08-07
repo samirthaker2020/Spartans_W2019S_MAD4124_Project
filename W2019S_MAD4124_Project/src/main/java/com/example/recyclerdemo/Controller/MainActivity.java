@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lstcategoryData = findViewById(R.id.rc1);
+BottomNavigationView bv= (BottomNavigationView) findViewById(R.id.bnav1);
+
+bv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
               data();
 
@@ -64,4 +67,33 @@ public class MainActivity extends AppCompatActivity {
         cname.add(new RcModal("Others2"));
         cname.add(new RcModal("Others3"));
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.cat_edit:
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "EDIT",
+                            Toast.LENGTH_SHORT);
+
+                    toast.show();
+                    return true;
+
+                case R.id.cat_delete:
+                    Toast toast1 = Toast.makeText(getApplicationContext(),
+                            "DELETE",
+                            Toast.LENGTH_SHORT);
+
+                    toast1.show();
+                    return true;
+            }
+
+            return false;
+        }
+
+
+        };
 }
