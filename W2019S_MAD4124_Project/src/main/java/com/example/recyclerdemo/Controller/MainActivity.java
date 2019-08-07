@@ -32,6 +32,8 @@ import com.example.recyclerdemo.R;
 import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Database.DatabaseHelper;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,8 +112,10 @@ public class MainActivity extends AppCompatActivity {
         final TextView upatecategory = (TextView) dialog.findViewById(R.id.category);
         Button btnadd= (Button) dialog.findViewById(R.id.btnadd);
         Button btncancel= (Button) dialog.findViewById(R.id.btncancel);
-            // Note n=db.getNote(notesList.get(position));
-           //  upatecategory.setText(n.getCategory().toString());
+        TextView title= (TextView) dialog.findViewById(R.id.dialog_title);
+        title.setText("Update category");
+             Note n= notesList.get(position);
+            upatecategory.setText(n.getCategory());
         btncancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,8 +125,16 @@ public class MainActivity extends AppCompatActivity {
         btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateNote(upatecategory.getText().toString(),position);
-                dialog.dismiss();
+
+                if (TextUtils.isEmpty(upatecategory.getText().toString())) {
+                    Toast.makeText(MainActivity.this, "Enter Category First!", Toast.LENGTH_LONG).show();
+                }else{
+
+                    updateNote(upatecategory.getText().toString(),position);
+                    dialog.dismiss();
+                }
+
+
             }
         });
         //  Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -159,9 +171,12 @@ public class MainActivity extends AppCompatActivity {
           btnadd.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-createNote(newcategory.getText().toString());
-dialog.dismiss();
-              }
+                  if (TextUtils.isEmpty(newcategory.getText().toString())) {
+                      Toast.makeText(MainActivity.this, "Enter Category First!", Toast.LENGTH_LONG).show();
+                  }else {
+                      createNote(newcategory.getText().toString());
+                        dialog.dismiss();
+              }}
           });
         //  Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
           // if button is clicked, close the custom dialog
