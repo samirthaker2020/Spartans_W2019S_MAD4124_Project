@@ -29,15 +29,20 @@ import com.example.recyclerdemo.Adapter.Rc_Adapter;
 import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Modal.RcModal;
 import com.example.recyclerdemo.R;
+import com.example.recyclerdemo.Modal.Note;
+import com.example.recyclerdemo.Database.DatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private List<Note> notesList = new ArrayList<>();
     private ArrayList<RcModal> cname;
     private RecyclerView lstcategoryData;
     private Rc_Adapter mAdapter;
     public ActionBar ac;
+    private DatabaseHelper db;
+    public TextView noNotesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
 
 //bv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-              data();
+             // data();
+        db = new DatabaseHelper(this);
 
-        mAdapter = new Rc_Adapter(cname);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        notesList.addAll(db.getAllNotes());
+        mAdapter = new Rc_Adapter(notesList,this);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
         //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
@@ -88,7 +95,44 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
     }
+    private void showEditNoteDialog(final int position)
+    {
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.50);
 
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.note_dialog);
+        dialog.setTitle("Update Category");
+
+
+        // set the custom dialog components - text, image and button
+        final TextView upatecategory = (TextView) dialog.findViewById(R.id.category);
+        Button btnadd= (Button) dialog.findViewById(R.id.btnadd);
+        Button btncancel= (Button) dialog.findViewById(R.id.btncancel);
+            // Note n=db.getNote(notesList.get(position));
+           //  upatecategory.setText(n.getCategory().toString());
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateNote(upatecategory.getText().toString(),position);
+                dialog.dismiss();
+            }
+        });
+        //  Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialog.getWindow().setLayout(width, height);
+
+        dialog.show();
+
+
+    }
       private void showNoteDialog()
       {
           int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
@@ -101,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
 
           // set the custom dialog components - text, image and button
-          TextView newcategory = (TextView) dialog.findViewById(R.id.category);
+          final TextView newcategory = (TextView) dialog.findViewById(R.id.category);
             Button btnadd= (Button) dialog.findViewById(R.id.btnadd);
           Button btncancel= (Button) dialog.findViewById(R.id.btncancel);
 
@@ -115,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
           btnadd.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-
+createNote(newcategory.getText().toString());
+dialog.dismiss();
               }
           });
         //  Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -126,6 +171,49 @@ public class MainActivity extends AppCompatActivity {
 
 
       }
+    private void createNote(String note) {
+        // inserting note in db and getting
+        // newly inserted note id
+        long id = db.insertNote(note);
+
+        // get the newly inserted note from db
+        Note n = db.getNote(id);
+
+        if (n != null) {
+            // adding new note to array list at 0 position
+            notesList.add(0, n);
+
+            // refreshing the list
+            mAdapter.notifyDataSetChanged();
+
+          //  toggleEmptyNotes();
+        }
+    }
+    private void deleteNote(int position) {
+        // deleting the note from db
+        db.deleteNote(notesList.get(position));
+
+        // removing the note from the list
+        notesList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+
+        //toggleEmptyNotes();
+    }
+
+    private void updateNote(String note, int position) {
+        Note n = notesList.get(position);
+        // updating note text
+        n.setCategory(note);
+
+        // updating note in db
+        db.updateNote(n);
+
+        // refreshing the list
+        notesList.set(position, n);
+        mAdapter.notifyItemChanged(position);
+
+        //toggleEmptyNotes();
+    }
 
     private void showActionsDialog(final int position) {
         CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
@@ -137,14 +225,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                   //  showNoteDialog(true, notesList.get(position), position);
+                    showEditNoteDialog(position);
                 } else {
                   //  deleteNote(position);
+                    deleteNote(position);
                 }
             }
         });
         builder.show();
     }
-    public void data() {
+   /* public void data() {
         cname = new ArrayList<>();
         cname.add(new RcModal("Food"));
         cname.add(new RcModal("Friends"));
@@ -156,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         cname.add(new RcModal("Others1"));
         cname.add(new RcModal("Others2"));
         cname.add(new RcModal("Others3"));
-    }
+    } */
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -186,4 +276,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         };
+
+    /**
+     * Toggling list and empty notes view
+     */
+    private void toggleEmptyNotes() {
+        // you can check notesList.size() > 0
+
+        if (db.getNotesCount() > 0) {
+            noNotesView.setVisibility(View.GONE);
+        } else {
+            noNotesView.setVisibility(View.VISIBLE);
+        }
+    }
 }

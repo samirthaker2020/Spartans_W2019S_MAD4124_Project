@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
-        values.put(Note.COLUMN_NOTE, note);
+        values.put(Note.COLUMN_CATEGORY, note);
 
         // insert row
         long id = db.insert(Note.TABLE_NAME, null, values);
@@ -68,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Note.TABLE_NAME,
-                new String[]{Note.COLUMN_ID, Note.COLUMN_NOTE, Note.COLUMN_TIMESTAMP},
+                new String[]{Note.COLUMN_ID, Note.COLUMN_CATEGORY},
                 Note.COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -78,8 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // prepare note object
         Note note = new Note(
                 cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)),
-                cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)),
-                cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
+                cursor.getString(cursor.getColumnIndex(Note.COLUMN_CATEGORY)));
 
         // close the db connection
         cursor.close();
@@ -92,7 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Select All Query
         String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " ORDER BY " +
-                Note.COLUMN_TIMESTAMP + " DESC";
+                Note.COLUMN_ID + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -102,8 +101,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 Note note = new Note();
                 note.setId(cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)));
-                note.setNote(cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)));
-                note.setTimestamp(cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
+                note.setCategory(cursor.getString(cursor.getColumnIndex(Note.COLUMN_CATEGORY)));
+
 
                 notes.add(note);
             } while (cursor.moveToNext());
@@ -133,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Note.COLUMN_NOTE, note.getNote());
+        values.put(Note.COLUMN_CATEGORY, note.getCategory());
 
         // updating row
         return db.update(Note.TABLE_NAME, values, Note.COLUMN_ID + " = ?",

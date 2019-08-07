@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.R;
 import com.example.recyclerdemo.Modal.RcModal;
 
@@ -17,11 +18,12 @@ import java.util.List;
 
 public  class Rc_Adapter extends RecyclerView.Adapter<Rc_Adapter.Myviewholder>{
 
-    private List<RcModal> categoryList;
+    private List<Note> categoryList;
     private Context mcontext;
 
-    public Rc_Adapter(List<RcModal> categoryList) {
+    public Rc_Adapter(List<Note> categoryList, Context mcontext) {
         this.categoryList = categoryList;
+        this.mcontext = mcontext;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public  class Rc_Adapter extends RecyclerView.Adapter<Rc_Adapter.Myviewholder>{
 
     @Override
     public void onBindViewHolder(@NonNull Myviewholder myviewholder, int i) {
-        final RcModal cat = categoryList.get(i);
+        final Note cat = categoryList.get(i);
         myviewholder.cname.setText(cat.getCategory());
 
         myviewholder.itemView.setOnClickListener(new View.OnClickListener() {
