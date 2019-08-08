@@ -1,6 +1,8 @@
 package com.example.recyclerdemo.Controller;
 
 import android.app.Dialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,8 +19,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public ActionBar ac;
     private DatabaseHelper db;
     public TextView noNotesView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,4 +322,5 @@ public class MainActivity extends AppCompatActivity {
             noNotesView.setVisibility(View.VISIBLE);
         }
     }
+
 }
