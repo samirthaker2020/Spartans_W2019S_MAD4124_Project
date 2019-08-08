@@ -167,6 +167,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
                 nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
                 nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
                // nd.setNoteimage(cursor.getBlob(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
                 notesdetails.add(nd);
             } while (cursor.moveToNext());
@@ -217,6 +218,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
                 nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
                 nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
                 // nd.setNoteimage(cursor.getBlob(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
                 notesdetails1.add(nd);
             } while (cursor.moveToNext());

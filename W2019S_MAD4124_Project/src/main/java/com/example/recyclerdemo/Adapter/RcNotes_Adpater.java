@@ -13,6 +13,7 @@ import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Modal.NoteDetails;
 import com.example.recyclerdemo.R;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myviewholder> {
@@ -43,7 +44,9 @@ public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myvie
         System.out.println(nd.getNotetitle());
         System.out.println(nd.getNotedetails());
         myviewholder.ntitle.setText(nd.getNotetitle());
-        myviewholder.ndatetime.setText(nd.getNotedetails());
+        myviewholder.ndatetime.setText(nd.getNotedate());
+
+
 
     }
 
