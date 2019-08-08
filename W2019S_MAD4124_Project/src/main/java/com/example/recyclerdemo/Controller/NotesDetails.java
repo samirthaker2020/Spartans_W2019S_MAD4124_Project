@@ -12,10 +12,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -76,6 +78,33 @@ private int stuff=0;
 
         mAdapter.notifyDataSetChanged();
 
+
+        lstallnoteData.addOnItemTouchListener(new RecyclerTouchListener(this,
+                lstallnoteData, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent i = new Intent(NotesDetails.this, ViewNotes.class);
+                NoteDetails n1=notesdetailsList.get(position);
+                int getrec= n1.getId();
+                Log.d("colid",Integer.toString(getrec));
+//Create the bundle
+                Bundle bundle = new Bundle();
+
+//Add your data to bundle
+                bundle.putInt("colid", getrec);
+
+//Add the bundle to the intent
+                i.putExtras(bundle);
+
+//Fire that second activity
+                startActivity(i);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
     }
 
