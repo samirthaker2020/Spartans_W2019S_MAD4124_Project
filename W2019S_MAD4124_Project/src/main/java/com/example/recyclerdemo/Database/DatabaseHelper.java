@@ -165,11 +165,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 NoteDetails nd = new NoteDetails();
                 nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
                 nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
-                nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
-                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
-                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
-                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
-
+                nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
+                nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+               // nd.setNoteimage(cursor.getBlob(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
                 notesdetails.add(nd);
             } while (cursor.moveToNext());
         }
@@ -179,5 +177,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // return notes list
         return notesdetails;
+    }
+
+    public long insertNotedetails(String cid,String title,String ndetails) {
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        // `id` and `timestamp` will be inserted automatically.
+        // no need to add them
+        values.put(NoteDetails.COLUMN_CATEGORY, cid);
+        values.put(NoteDetails.COLUMN_NOTETITLE,title);
+        values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
+
+        // insert row
+        long id = db.insert(NoteDetails.TABLE_NAME, null, values);
+
+        // close db connection
+        db.close();
+
+        // return newly inserted row id
+        return id;
+    }
+
+    public List<NoteDetails> getNoteDetails(long id) {
+        List<NoteDetails> notesdetails1 = new ArrayList<>();
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(NoteDetails.TABLE_NAME,
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                NoteDetails.COLUMN_CATEGORY + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                NoteDetails nd = new NoteDetails();
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
+                nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
+                nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
+                nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                // nd.setNoteimage(cursor.getBlob(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                notesdetails1.add(nd);
+            } while (cursor.moveToNext());
+        }
+
+        // close the db connection
+        cursor.close();
+
+        return notesdetails1;
     }
 }

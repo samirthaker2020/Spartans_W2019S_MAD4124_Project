@@ -38,6 +38,10 @@ public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myvie
     @Override
     public void onBindViewHolder(@NonNull RcNotes_Adpater.myviewholder myviewholder, int i) {
         final NoteDetails nd = lstnote.get(i);
+        System.out.println(nd.getNotedate());
+        System.out.println(nd.getCategory());
+        System.out.println(nd.getNotetitle());
+        System.out.println(nd.getNotedetails());
         myviewholder.ntitle.setText(nd.getNotetitle());
         myviewholder.ndatetime.setText(nd.getNotedate());
 

@@ -1,5 +1,6 @@
 package com.example.recyclerdemo.Controller;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,12 +10,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.recyclerdemo.Database.DatabaseHelper;
+import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.R;
 
 public class Addnotes extends AppCompatActivity {
 int cid=0;
+private EditText title;
+private EditText ndetails;
     private DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,9 @@ int cid=0;
         cid=bundle.getInt("cid");
         System.out.println(cid);
         db = new DatabaseHelper(this);
+         title= (EditText) findViewById(R.id.txttitle);
+         ndetails= (EditText) findViewById(R.id.txtnodedetails);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,6 +57,10 @@ int cid=0;
                 return true;
 
             case R.id.addnotes1:
+
+
+                db.insertNotedetails(Integer.toString(cid),title.getText().toString(),ndetails.getText().toString());
+
                 return  true;
         }
         return super.onOptionsItemSelected(item);

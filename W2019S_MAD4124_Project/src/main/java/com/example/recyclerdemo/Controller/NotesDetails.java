@@ -57,8 +57,9 @@ private int stuff=0;
          stuff = bundle.getInt("categoryid");
         db = new DatabaseHelper(this);
 
-        notesdetailsList.addAll(db.getAllNotesDetails());
+        notesdetailsList.addAll(db.getNoteDetails(stuff));
         //  cid.setText(Integer.toString(stuff));
+       // System.out.println(notesdetailsList.get(2));
 //data();
         mAdapter = new RcNotes_Adpater(notesdetailsList,this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);

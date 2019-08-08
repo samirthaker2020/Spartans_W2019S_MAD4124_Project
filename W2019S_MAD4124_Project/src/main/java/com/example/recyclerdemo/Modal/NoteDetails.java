@@ -97,9 +97,9 @@ public class NoteDetails {
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COLUMN_CATEGORY + " TEXT,"
-                    + COLUMN_NOTETITLE + " TEXT,"
-                    + COLUMN_NOTEDATE + " TEXT,"
+                    + COLUMN_CATEGORY + " TEXT NOT NULL,"
+                    + COLUMN_NOTETITLE + " TEXT NOT NULL,"
+                    + COLUMN_NOTEDATE + " DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,"
                     + COLUMN_NOTEDETAILS + " TEXT,"
                     + COLUMN_NOTEIMAGE + " BLOB NULL"
                     + ")";
