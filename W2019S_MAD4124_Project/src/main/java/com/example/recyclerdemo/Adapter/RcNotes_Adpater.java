@@ -43,7 +43,7 @@ public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myvie
         System.out.println(nd.getNotetitle());
         System.out.println(nd.getNotedetails());
         myviewholder.ntitle.setText(nd.getNotetitle());
-        myviewholder.ndatetime.setText(nd.getNotedate());
+        myviewholder.ndatetime.setText(nd.getNotedetails());
 
     }
 

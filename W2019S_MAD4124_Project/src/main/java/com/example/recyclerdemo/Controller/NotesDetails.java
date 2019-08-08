@@ -44,7 +44,7 @@ private int stuff=0;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("MyNotes");
-        getSupportActionBar().setSubtitle("All Notes");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         setContentView(R.layout.activity_notes_details);
@@ -54,9 +54,12 @@ private int stuff=0;
         Bundle bundle = getIntent().getExtras();
         SearchView sc = (SearchView) findViewById(R.id.notes_search);
 //Extract the data…
-         stuff = bundle.getInt("categoryid");
-        db = new DatabaseHelper(this);
 
+            stuff = bundle.getInt("categoryid");
+
+        db = new DatabaseHelper(this);
+        Note n=db.getNote(stuff);
+        getSupportActionBar().setSubtitle(n.getCategory());
         notesdetailsList.addAll(db.getNoteDetails(stuff));
         //  cid.setText(Integer.toString(stuff));
        // System.out.println(notesdetailsList.get(2));

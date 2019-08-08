@@ -1,20 +1,28 @@
 package com.example.recyclerdemo.Controller;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recyclerdemo.Database.DatabaseHelper;
 import com.example.recyclerdemo.Modal.Note;
+import com.example.recyclerdemo.Modal.NoteDetails;
 import com.example.recyclerdemo.R;
 
 public class Addnotes extends AppCompatActivity {
@@ -57,10 +65,37 @@ private EditText ndetails;
                 return true;
 
             case R.id.addnotes1:
+                if (TextUtils.isEmpty(title.getText().toString()) || TextUtils.isEmpty(ndetails.getText().toString()) ) {
+                    Toast.makeText(Addnotes.this, "Enter All Field First", Toast.LENGTH_LONG).show();
+                }else {
+                    db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString());
 
 
-                db.insertNotedetails(Integer.toString(cid),title.getText().toString(),ndetails.getText().toString());
 
+                     title.setText("");
+                     ndetails.setText("");
+                    AlertDialog alertDialog = new AlertDialog.Builder(Addnotes.this).create();
+                    alertDialog.setTitle("SUCESS");
+                    alertDialog.setMessage("Saved Sucessfully");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //dialog.dismiss();
+                                    Intent it = new Intent(Addnotes.this, NotesDetails.class);
+                                    Bundle bundle = new Bundle();
+
+//Add your data to bundle
+                                    bundle.putInt("categoryid", cid);
+
+//Add the bundle to the intent
+                                    it.putExtras(bundle);
+                                    startActivity(it);
+                                }
+                            });
+                    alertDialog.show();
+
+                    return true;
+                }
                 return  true;
         }
         return super.onOptionsItemSelected(item);
