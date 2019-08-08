@@ -52,8 +52,8 @@ public  class Rc_Adapter extends RecyclerView.Adapter<Rc_Adapter.Myviewholder>  
                 CharSequence text = cat.getCategory();
                 int duration = Toast.LENGTH_LONG;
 
-                Toast toast = Toast.makeText(mcontext, text, duration);
-                toast.show();
+              //  Toast toast = Toast.makeText(mcontext, text, duration);
+                //toast.show();
             }
         });
 

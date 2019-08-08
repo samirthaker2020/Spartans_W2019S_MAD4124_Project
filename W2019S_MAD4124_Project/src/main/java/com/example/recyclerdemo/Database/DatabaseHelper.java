@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.recyclerdemo.Modal.Note;
-
+import com.example.recyclerdemo.Modal.NoteDetails;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -32,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // create notes table
         db.execSQL(Note.CREATE_TABLE);
+        db.execSQL(NoteDetails.CREATE_TABLE);
     }
 
     // Upgrading database
@@ -39,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + Note.TABLE_NAME);
-
+        db.execSQL("DROP TABLE IF EXISTS " + NoteDetails.TABLE_NAME);
         // Create tables again
         onCreate(db);
     }
@@ -144,5 +145,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(Note.TABLE_NAME, Note.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(note.getId())});
         db.close();
+    }
+
+    //---------------------------------note-deatails-----------------------------------------
+
+    public List<NoteDetails> getAllNotesDetails() {
+        List<NoteDetails> notesdetails = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + NoteDetails.TABLE_NAME + " ORDER BY " +
+                NoteDetails.COLUMN_ID + " DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                NoteDetails nd = new NoteDetails();
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
+                nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
+                nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+
+                notesdetails.add(nd);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return notes list
+        return notesdetails;
     }
 }
