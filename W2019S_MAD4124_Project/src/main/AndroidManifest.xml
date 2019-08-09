@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Controller.ViewNotes"></activity>
+        <activity android:name=".Controller.ViewNotes"
+            android:parentActivityName=".Controller.NotesDetails"></activity>
         <activity android:name=".Controller.Splash_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

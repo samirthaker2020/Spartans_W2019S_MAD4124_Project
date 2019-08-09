@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -229,4 +230,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return notesdetails1;
     }
+    public NoteDetails getNotedetails(long id) {
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(NoteDetails.TABLE_NAME,
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                NoteDetails.COLUMN_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        // prepare note object
+        NoteDetails note = new NoteDetails(
+                cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)),
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)),
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)),
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)),
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE))
+        );
+        // close the db connection
+        cursor.close();
+        Log.d("fcat",note.getCategory());
+        return note;
+    }
+
 }
