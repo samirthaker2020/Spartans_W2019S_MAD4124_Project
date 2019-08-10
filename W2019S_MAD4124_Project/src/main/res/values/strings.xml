@@ -8,5 +8,6 @@
     <string name="hint_enter_note">Enter your note!</string>
     <string name="search">search</string>
     <string name="addnotes">AddNotes</string>
+    <string name="delete">Delete</string>
 
 </resources>

@@ -9,6 +9,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,8 +29,9 @@ private int colid=0;
 private TextView pcolid;
 private EditText txtviewtitle;
 private EditText txtviewndetails;
+public MenuItem saveitem;
     private DatabaseHelper db;
-    private NoteDetails nds;
+    private NoteDetails ndd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +45,7 @@ private EditText txtviewndetails;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         db = new DatabaseHelper(this);
-         NoteDetails ndd=db.getNotedetails(colid);
+          ndd=db.getNotedetails(colid);
       getSupportActionBar().setSubtitle(ndd.getNotetitle());
       txtviewtitle= (EditText) findViewById(R.id.txtviewtitle);
       txtviewndetails=(EditText) findViewById(R.id.txtviewndetails);
@@ -52,9 +55,20 @@ private EditText txtviewndetails;
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.viewnotes_menu, menu);
+        saveitem= (MenuItem) findViewById(R.id.viewnotes_save);
+
+        return super.onCreateOptionsMenu(menu);
+
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
@@ -63,9 +77,43 @@ private EditText txtviewndetails;
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 NavUtils.navigateUpTo(this, intent);
                 return true;
+            case R.id.viewnotes_edit:
 
 
+                    entext(true);
+                return true;
+            case R.id.viewnotes_delete:
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                builder1.setMessage("Write your message here.");
+                builder1.setCancelable(true);
 
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                deleteNote();
+                                Intent it = new Intent(ViewNotes.this, NotesDetails.class);
+                                Bundle bundle = new Bundle();
+
+//Add your data to bundle
+                                bundle.putInt("categoryid", Integer.valueOf( ndd.getCategory()));
+
+//Add the bundle to the intent
+                                it.putExtras(bundle);
+                                startActivity(it);
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -84,5 +132,12 @@ public void entext(boolean a)
 
 }
 
+    private void deleteNote() {
+        // deleting the note from db
+        db.deleteNotedetails(String.valueOf( ndd.getId()));
 
+
+
+        //toggleEmptyNotes();
+    }
 }

@@ -53,6 +53,8 @@ private EditText ndetails;
         inflater.inflate(R.menu.addnotemenu1, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

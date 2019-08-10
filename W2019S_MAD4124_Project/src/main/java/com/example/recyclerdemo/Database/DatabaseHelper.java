@@ -256,5 +256,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("fcat",note.getCategory());
         return note;
     }
+    public void deleteNotedetails(String a) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(NoteDetails.TABLE_NAME, NoteDetails.COLUMN_ID + " = ?",
+                new String[]{a});
+        db.close();
+    }
 
 }
