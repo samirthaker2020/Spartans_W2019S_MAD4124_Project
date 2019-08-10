@@ -84,7 +84,7 @@ public MenuItem saveitem;
                 return true;
             case R.id.viewnotes_delete:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-                builder1.setMessage("Write your message here.");
+                builder1.setMessage("Do you want to delete the note ?");
                 builder1.setCancelable(true);
 
                 builder1.setPositiveButton(
