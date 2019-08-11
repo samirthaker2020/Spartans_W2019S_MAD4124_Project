@@ -62,6 +62,7 @@ private EditText ndetails;
     private DatabaseHelper db;
     private Button btnaddimage;
     private ImageView addimageview;
+    String img_str;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -112,17 +113,22 @@ private EditText ndetails;
                     Toast.makeText(Addnotes.this, "Enter All Field First", Toast.LENGTH_LONG).show();
                 }else {
 
-                    Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-                    byte[] byte_arr = stream.toByteArray();
-                    String img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 
+
+                    if(addimageview.getDrawable()==null)
+                    {
+                        img_str="NULL";
+                    }else{
+                        Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                        byte[] byte_arr = stream.toByteArray();
+                         img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+
+                    }
 
 
                     db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString(),img_str);
-
-
 
                      title.setText("");
                      ndetails.setText("");

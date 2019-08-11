@@ -188,10 +188,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
-        values.put(NoteDetails.COLUMN_CATEGORY, cid);
-        values.put(NoteDetails.COLUMN_NOTETITLE,title);
-        values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
-        values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
+       if(img_str==null)
+       {
+           Log.d("image",img_str);
+           values.put(NoteDetails.COLUMN_CATEGORY, cid);
+           values.put(NoteDetails.COLUMN_NOTETITLE,title);
+           values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
+          values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
+       }else
+       {
+           values.put(NoteDetails.COLUMN_CATEGORY, cid);
+           values.put(NoteDetails.COLUMN_NOTETITLE,title);
+           values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
+           values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
+       }
 
         // insert row
         long id = db.insert(NoteDetails.TABLE_NAME, null, values);

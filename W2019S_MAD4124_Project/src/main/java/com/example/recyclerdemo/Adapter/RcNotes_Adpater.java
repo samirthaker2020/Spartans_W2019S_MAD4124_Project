@@ -48,8 +48,13 @@ public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myvie
         System.out.println(nd.getNotedetails());
         myviewholder.ntitle.setText(nd.getNotetitle());
         myviewholder.ndatetime.setText("Last Modified:"+" "+nd.getNotedate());
+        if(nd.getNoteimage()==null)
+        {
 
-        myviewholder.nimage.setImageBitmap(StringToBitMap(nd.getNoteimage()));
+        }else {
+            myviewholder.nimage.setImageBitmap(StringToBitMap(nd.getNoteimage()));
+        }
+
 
 
 
