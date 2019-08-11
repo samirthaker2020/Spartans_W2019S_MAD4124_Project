@@ -181,7 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return notesdetails;
     }
 
-    public long insertNotedetails(String cid,String title,String ndetails) {
+    public long insertNotedetails(String cid,String title,String ndetails, String img_str) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -191,6 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(NoteDetails.COLUMN_CATEGORY, cid);
         values.put(NoteDetails.COLUMN_NOTETITLE,title);
         values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
+        values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
 
         // insert row
         long id = db.insert(NoteDetails.TABLE_NAME, null, values);
@@ -220,7 +221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
                 nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
                 nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
-                // nd.setNoteimage(cursor.getBlob(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                 nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
                 notesdetails1.add(nd);
             } while (cursor.moveToNext());
         }

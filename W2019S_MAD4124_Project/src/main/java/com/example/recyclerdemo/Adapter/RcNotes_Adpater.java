@@ -1,8 +1,11 @@
 package com.example.recyclerdemo.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,10 +47,23 @@ public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myvie
         System.out.println(nd.getNotetitle());
         System.out.println(nd.getNotedetails());
         myviewholder.ntitle.setText(nd.getNotetitle());
-        myviewholder.ndatetime.setText(nd.getNotedate());
+        myviewholder.ndatetime.setText("Last Modified:"+" "+nd.getNotedate());
+
+        myviewholder.nimage.setImageBitmap(StringToBitMap(nd.getNoteimage()));
 
 
 
+    }
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }
+        catch(Exception e){
+            e.getMessage();
+            return null;
+        }
     }
 
     @Override

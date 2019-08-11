@@ -99,7 +99,7 @@ public class NoteDetails {
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + COLUMN_CATEGORY + " TEXT NOT NULL,"
                     + COLUMN_NOTETITLE + " TEXT NOT NULL,"
-                    + COLUMN_NOTEDATE + " DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,"
+                    + COLUMN_NOTEDATE + " DATETIME  DEFAULT (datetime('now','localtime')) NOT NULL,"
                     + COLUMN_NOTEDETAILS + " TEXT,"
                     + COLUMN_NOTEIMAGE + " BLOB NULL"
                     + ")";

@@ -3,16 +3,20 @@ package com.example.recyclerdemo.Controller;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,7 @@ private TextView pcolid;
 private EditText txtviewtitle;
 private EditText txtviewndetails;
 public MenuItem saveitem;
+public ImageView imagefornotes;
     private DatabaseHelper db;
     private NoteDetails ndd;
     @Override
@@ -51,6 +56,10 @@ public MenuItem saveitem;
       txtviewndetails=(EditText) findViewById(R.id.txtviewndetails);
       txtviewndetails.setText(ndd.getNotedetails());
       txtviewtitle.setText(ndd.getNotetitle());
+      imagefornotes= (ImageView) findViewById(R.id.imageView31);
+        imagefornotes.setImageBitmap(StringToBitMap(ndd.getNoteimage()));
+        TextView txtdate= (TextView) findViewById(R.id.lbldate);
+        txtdate.setText("Last Modified on"+" "+ndd.getNotedate());
         entext(false);
 
 
@@ -64,6 +73,22 @@ public MenuItem saveitem;
         return super.onCreateOptionsMenu(menu);
 
 
+    }
+
+
+
+
+
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }
+        catch(Exception e){
+            e.getMessage();
+            return null;
+        }
     }
 
     @Override

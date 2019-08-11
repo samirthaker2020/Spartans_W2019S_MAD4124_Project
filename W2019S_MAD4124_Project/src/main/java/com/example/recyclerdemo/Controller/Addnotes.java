@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -109,7 +111,16 @@ private EditText ndetails;
                 if (TextUtils.isEmpty(title.getText().toString()) || TextUtils.isEmpty(ndetails.getText().toString()) ) {
                     Toast.makeText(Addnotes.this, "Enter All Field First", Toast.LENGTH_LONG).show();
                 }else {
-                    db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString());
+
+                    Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                    byte[] byte_arr = stream.toByteArray();
+                    String img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+
+
+
+                    db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString(),img_str);
 
 
 
