@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -103,9 +104,22 @@ public ImageView imagefornotes;
                 NavUtils.navigateUpTo(this, intent);
                 return true;
             case R.id.viewnotes_edit:
+                Intent i = new Intent(ViewNotes.this, Addnotes.class);
 
 
-                    entext(true);
+//Create the bundle
+                Bundle bundle = new Bundle();
+
+//Add your data to bundle
+                bundle.putInt("editnotes", ndd.getId());
+
+//Add the bundle to the intent
+                i.putExtras(bundle);
+
+//Fire that second activity
+                startActivity(i);
+
+                   // entext(true);
                 return true;
             case R.id.viewnotes_delete:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(this);

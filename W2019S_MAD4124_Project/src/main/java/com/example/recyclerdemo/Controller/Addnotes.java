@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -62,6 +63,8 @@ private EditText ndetails;
     private DatabaseHelper db;
     private Button btnaddimage;
     private ImageView addimageview;
+    private int editnotes;
+    private NoteDetails editnodtemodal;
     String img_str;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +73,29 @@ private EditText ndetails;
         setContentView(R.layout.activity_addnotes);
         getSupportActionBar().setTitle("MyNotes");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle("Add Notes");
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         Bundle bundle = getIntent().getExtras();
         cid=bundle.getInt("cid");
+        editnotes=bundle.getInt("editnotes") ;
         System.out.println(cid);
         db = new DatabaseHelper(this);
-         title= (EditText) findViewById(R.id.txttitle);
-         ndetails= (EditText) findViewById(R.id.txtnodedetails);
-         btnaddimage= (Button) findViewById(R.id.addimage);
-         addimageview= (ImageView) findViewById(R.id.addimage_view);
+        title= (EditText) findViewById(R.id.txttitle);
+        ndetails= (EditText) findViewById(R.id.txtnodedetails);
+        btnaddimage= (Button) findViewById(R.id.addimage);
+        addimageview= (ImageView) findViewById(R.id.addimage_view);
+        if(editnotes==0)
+        {
+            getSupportActionBar().setSubtitle("Add_Notes");
+        }else
+        {
+            getSupportActionBar().setSubtitle("Modify_Notes");
+            editnodtemodal=db.getNotedetails(editnotes);
+            title.setText(editnodtemodal.getNotetitle());
+            ndetails.setText(editnodtemodal.getNotedetails());
+            addimageview.setImageBitmap(StringToBitMap(editnodtemodal.getNoteimage()));
+        }
+
       //  addimageview.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             btnaddimage.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +104,17 @@ private EditText ndetails;
                     showPictureDialog();
                 }
             });
+    }
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }
+        catch(Exception e){
+            e.getMessage();
+            return null;
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
