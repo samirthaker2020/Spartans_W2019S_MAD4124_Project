@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -273,5 +275,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{a});
         db.close();
     }
+
+    public int updateNotedetails(NoteDetails note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        LocalDateTime myDateObj = LocalDateTime.now();
+       // System.out.println("Before formatting: " + myDateObj);
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        String formattedDate = myDateObj.format(myFormatObj);
+        ContentValues values = new ContentValues();
+        values.put(NoteDetails.COLUMN_NOTETITLE, note.getNotetitle());
+        values.put(NoteDetails.COLUMN_NOTEDETAILS, note.getNotedetails());
+        values.put(NoteDetails.COLUMN_NOTEIMAGE, note.getNoteimage());
+        values.put(NoteDetails.COLUMN_NOTEDATE,formattedDate);
+
+        // updating row
+        return db.update(NoteDetails.TABLE_NAME, values, NoteDetails.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(note.getId())});
+    }
+
+
 
 }

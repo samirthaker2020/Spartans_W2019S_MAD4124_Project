@@ -140,47 +140,85 @@ private EditText ndetails;
                     Toast.makeText(Addnotes.this, "Enter All Field First", Toast.LENGTH_LONG).show();
                 }else {
 
+                    if (editnotes == 0) {
+                        if (addimageview.getDrawable() == null) {
+                            img_str = "NULL";
+                        } else {
+                            Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                            byte[] byte_arr = stream.toByteArray();
+                            img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+
+                        }
 
 
-                    if(addimageview.getDrawable()==null)
-                    {
-                        img_str="NULL";
-                    }else{
-                        Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-                        byte[] byte_arr = stream.toByteArray();
-                         img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+                        db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString(), img_str);
 
-                    }
-
-
-                    db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString(),img_str);
-
-                     title.setText("");
-                     ndetails.setText("");
-                    AlertDialog alertDialog = new AlertDialog.Builder(Addnotes.this).create();
-                    alertDialog.setTitle("SUCESS");
-                    alertDialog.setMessage("Saved Sucessfully");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //dialog.dismiss();
-                                    Intent it = new Intent(Addnotes.this, NotesDetails.class);
-                                    Bundle bundle = new Bundle();
+                        title.setText("");
+                        ndetails.setText("");
+                        AlertDialog alertDialog = new AlertDialog.Builder(Addnotes.this).create();
+                        alertDialog.setTitle("SUCESS");
+                        alertDialog.setMessage("Saved Sucessfully");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //dialog.dismiss();
+                                        Intent it = new Intent(Addnotes.this, NotesDetails.class);
+                                        Bundle bundle = new Bundle();
 
 //Add your data to bundle
-                                    bundle.putInt("categoryid", cid);
+                                        bundle.putInt("categoryid", cid);
 
 //Add the bundle to the intent
-                                    it.putExtras(bundle);
-                                    startActivity(it);
-                                }
-                            });
-                    alertDialog.show();
+                                        it.putExtras(bundle);
+                                        startActivity(it);
+                                    }
+                                });
+                        alertDialog.show();
 
-                    return true;
+                        return true;
+                    }
+                else
+            {
+                if (addimageview.getDrawable() == null) {
+                    img_str = "NULL";
+                } else {
+                    Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                    byte[] byte_arr = stream.toByteArray();
+                    img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+
                 }
+                     NoteDetails enote=new NoteDetails();
+                            enote.setId(editnotes);
+                            enote.setNotedetails(ndetails.getText().toString());
+                            enote.setNotetitle(title.getText().toString());
+                            enote.setNoteimage(img_str);
+
+                       db.updateNotedetails(enote);
+                AlertDialog alertDialog = new AlertDialog.Builder(Addnotes.this).create();
+                alertDialog.setTitle("SUCESS");
+                alertDialog.setMessage("Saved Sucessfully");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dialog.dismiss();
+                                Intent it = new Intent(Addnotes.this, NotesDetails.class);
+                                Bundle bundle = new Bundle();
+
+//Add your data to bundle
+                                bundle.putInt("categoryid", Integer.parseInt(editnodtemodal.getCategory()));
+
+//Add the bundle to the intent
+                                it.putExtras(bundle);
+                                startActivity(it);
+                            }
+                        });
+                alertDialog.show();
+
+            }}
                 return  true;
         }
         return super.onOptionsItemSelected(item);
