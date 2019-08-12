@@ -46,6 +46,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private List<Note> notesList = new ArrayList<>();
+    private List<Note> cat = new ArrayList<>();
     private ArrayList<RcModal> cname;
     private RecyclerView lstcategoryData;
     private Rc_Adapter mAdapter;
@@ -102,7 +103,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, final int position) {
                 Intent i = new Intent(MainActivity.this, NotesDetails.class);
-             Note n1=notesList.get(position);
+                Note n1;
+                if(cat.isEmpty())
+                {
+                    n1=notesList.get(position);
+                    System.out.println(n1.getId());
+                }
+                 else
+                {
+                    n1=cat.get(position);
+                    System.out.println(n1.getId());
+                }
+
+
+
+
                 int getrec= n1.getId();
                 Log.d("cid",Integer.toString(getrec));
 //Create the bundle
@@ -136,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
                 if(TextUtils.isEmpty(s))
                 {
-                    //contacts.clear();
+                    cat.clear();
                     getdata();
                     // Toast.makeText(getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
                 }
@@ -152,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void searchContact(String keyword) {
 
-        List<Note> cat = db.searchcategory(keyword);
+         cat = db.searchcategory(keyword);
 //        System.out.println(contacts.get(2));
 
         if (cat != null) {

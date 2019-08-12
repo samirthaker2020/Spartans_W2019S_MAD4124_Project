@@ -38,6 +38,7 @@ import java.util.List;
 public class NotesDetails extends AppCompatActivity {
     private List<NoteDetails> notesdetailsList = new ArrayList<>();
     private List<NoteDetails> cname = new ArrayList<>();
+    private List<NoteDetails> contacts = new ArrayList<>();
     private RecyclerView lstallnoteData;
     private RcNotes_Adpater mAdapter;
 private int stuff=0;
@@ -90,7 +91,17 @@ private int stuff=0;
             @Override
             public void onClick(View view, int position) {
                 Intent i = new Intent(NotesDetails.this, ViewNotes.class);
-                NoteDetails n1=notesdetailsList.get(position);
+                NoteDetails n1;
+                if(contacts.isEmpty())
+                {
+                    n1=notesdetailsList.get(position);
+                    System.out.println(n1.getId());
+                }
+                else
+                {
+                    n1=contacts.get(position);
+                    System.out.println(n1.getId());
+                }
                 int getrec= n1.getId();
                 Log.d("colid",Integer.toString(getrec));
 //Create the bundle
@@ -127,7 +138,7 @@ private int stuff=0;
             public boolean onQueryTextChange(String newText) {
                 if(TextUtils.isEmpty(newText))
                 {
-                    //contacts.clear();
+                    contacts.clear();
                     getdata();
                    // Toast.makeText(getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
                 }
@@ -183,7 +194,7 @@ private int stuff=0;
 
     private void searchContact(String keyword) {
 
-        List<NoteDetails> contacts = db.search(keyword);
+          contacts = db.search(keyword);
 //        System.out.println(contacts.get(2));
 
         if (contacts != null) {
