@@ -52,6 +52,7 @@ public class RcNotes_Adpater extends  RecyclerView.Adapter<RcNotes_Adpater.myvie
         {
 
         }else {
+
             myviewholder.nimage.setImageBitmap(StringToBitMap(nd.getNoteimage()));
         }
 

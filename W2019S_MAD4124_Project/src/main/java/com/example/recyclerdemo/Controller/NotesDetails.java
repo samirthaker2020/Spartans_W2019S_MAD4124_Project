@@ -12,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -41,6 +42,7 @@ public class NotesDetails extends AppCompatActivity {
     private RcNotes_Adpater mAdapter;
 private int stuff=0;
     private DatabaseHelper db;
+    private SearchView sc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ private int stuff=0;
         //  TextView cid= (TextView) findViewById(R.id.cid);
         //Get the bundle
         Bundle bundle = getIntent().getExtras();
-        SearchView sc = (SearchView) findViewById(R.id.notes_search);
+          sc = (SearchView) findViewById(R.id.notes_search);
 //Extract the data…
 
             stuff = bundle.getInt("categoryid");
@@ -106,6 +108,31 @@ private int stuff=0;
             }
         }));
 
+
+        sc.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+
+                    searchContact(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(TextUtils.isEmpty(newText))
+                {
+                    //contacts.clear();
+                    getdata();
+                   // Toast.makeText(getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    searchContact(newText);
+                }
+                return false;
+            }
+        });
     }
 
      public void data() {
@@ -149,6 +176,47 @@ private int stuff=0;
         }
     }
 
+    private void searchContact(String keyword) {
 
+        List<NoteDetails> contacts = db.search(keyword);
+//        System.out.println(contacts.get(2));
+
+        if (contacts != null) {
+
+            mAdapter = new RcNotes_Adpater(contacts,this);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+            //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+            lstallnoteData.setHasFixedSize(true);
+            lstallnoteData.setLayoutManager(mLayoutManager);
+            lstallnoteData.setItemAnimator(new DefaultItemAnimator());
+            lstallnoteData.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }else
+        {
+           // contacts.clear();
+            //mAdapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(),"No Data Found",Toast.LENGTH_SHORT).show();
+            // mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+//
+           // mAdapter.notifyDataSetChanged();
+        }
+    }
+
+
+    public void getdata()
+    {
+        mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+        //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+        lstallnoteData.setHasFixedSize(true);
+        lstallnoteData.setLayoutManager(mLayoutManager);
+        lstallnoteData.setItemAnimator(new DefaultItemAnimator());
+        lstallnoteData.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
     }
 

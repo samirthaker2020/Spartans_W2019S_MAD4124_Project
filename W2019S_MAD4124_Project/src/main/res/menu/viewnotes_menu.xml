@@ -9,12 +9,6 @@
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/viewnotes_save"
-        android:icon="@drawable/ic_action_viewsave"
-        android:iconTint="#FFFFFF"
-        android:title="@string/delete"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/viewnotes_delete"
         android:icon="@drawable/ic_action_viewdelete"
         android:iconTint="#FFFFFF"

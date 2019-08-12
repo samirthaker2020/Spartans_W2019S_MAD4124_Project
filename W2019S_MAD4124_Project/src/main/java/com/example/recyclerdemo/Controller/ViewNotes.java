@@ -34,7 +34,7 @@ private int colid=0;
 private TextView pcolid;
 private EditText txtviewtitle;
 private EditText txtviewndetails;
-public MenuItem saveitem;
+
 public ImageView imagefornotes;
     private DatabaseHelper db;
     private NoteDetails ndd;
@@ -69,7 +69,7 @@ public ImageView imagefornotes;
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.viewnotes_menu, menu);
-        saveitem= (MenuItem) findViewById(R.id.viewnotes_save);
+
 
         return super.onCreateOptionsMenu(menu);
 

@@ -146,7 +146,8 @@ private EditText ndetails;
                         } else {
                             Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                            bitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 30, stream);
                             byte[] byte_arr = stream.toByteArray();
                             img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 

@@ -295,5 +295,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public List<NoteDetails> search(String keyword) {
+        List<NoteDetails> contacts = null;
+        try {
+            SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+            Cursor cursor = sqLiteDatabase.rawQuery("select * from " + NoteDetails.TABLE_NAME + " where " + NoteDetails.COLUMN_NOTETITLE + " like ?", new String[] { "%" + keyword + "%" });
+            if (cursor.moveToFirst()) {
+                contacts = new ArrayList<NoteDetails>();
+                do {
+                    if (cursor != null)
+                        cursor.moveToFirst();
+
+                    // prepare note object
+                    NoteDetails note = new NoteDetails(
+                            cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)),
+                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)),
+                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)),
+                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)),
+                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)),
+                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)
+
+                            )
+                    );
+                    contacts.add(note);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            contacts = null;
+        }
+        return contacts;
+    }
 
 }
