@@ -19,7 +19,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+
+import android.app.SearchManager;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -30,8 +33,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recyclerdemo.Adapter.RcNotes_Adpater;
 import com.example.recyclerdemo.Adapter.Rc_Adapter;
 import com.example.recyclerdemo.Modal.Note;
+import com.example.recyclerdemo.Modal.NoteDetails;
 import com.example.recyclerdemo.Modal.RcModal;
 import com.example.recyclerdemo.R;
 import com.example.recyclerdemo.Database.DatabaseHelper;
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public ActionBar ac;
     private DatabaseHelper db;
     public TextView noNotesView;
-    private SearchView searchView;
+    private SearchView searchcat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Categories");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         setContentView(R.layout.activity_main);
-
+        searchcat = (SearchView)   findViewById(R.id.search_category);
+        searchcat.setFocusable(true);
+        searchcat.requestFocus();
+        searchcat.requestFocusFromTouch();
         lstcategoryData = findViewById(R.id.rc1);
+       searchcat.setQueryHint("Enter Category");
 //BottomNavigationView bv= (BottomNavigationView) findViewById(R.id.bnav1);
 
 //bv.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -69,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         notesList.addAll(db.getAllNotes());
         mAdapter = new Rc_Adapter(notesList,this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+       // lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
         //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
         lstcategoryData.setHasFixedSize(true);
@@ -114,7 +123,65 @@ public class MainActivity extends AppCompatActivity {
                 showActionsDialog(position);
             }
         }));
+
+        searchcat.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                searchContact(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(TextUtils.isEmpty(s))
+                {
+                    //contacts.clear();
+                    getdata();
+                    // Toast.makeText(getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    searchContact(s);
+                }
+                return false;
+            }
+        });
     }
+
+
+
+    private void searchContact(String keyword) {
+
+        List<Note> cat = db.searchcategory(keyword);
+//        System.out.println(contacts.get(2));
+
+        if (cat != null) {
+
+            mAdapter = new Rc_Adapter(cat,this);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        //    lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+            //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+            lstcategoryData.setHasFixedSize(true);
+            lstcategoryData.setLayoutManager(mLayoutManager);
+            lstcategoryData.setItemAnimator(new DefaultItemAnimator());
+            lstcategoryData.setAdapter(mAdapter);
+
+            mAdapter.notifyDataSetChanged();
+        }else
+        {
+            // contacts.clear();
+            //mAdapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(),"No category Found",Toast.LENGTH_SHORT).show();
+            // mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+//
+            // mAdapter.notifyDataSetChanged();
+        }
+    }
+
+
+
+
     private void showEditNoteDialog(final int position)
     {
         int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
@@ -323,4 +390,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void getdata()
+    {
+        mAdapter = new Rc_Adapter(notesList,this);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+      //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+        //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+        lstcategoryData.setHasFixedSize(true);
+        lstcategoryData.setLayoutManager(mLayoutManager);
+        lstcategoryData.setItemAnimator(new DefaultItemAnimator());
+        lstcategoryData.setAdapter(mAdapter);
+
+        mAdapter.notifyDataSetChanged();
+    }
 }

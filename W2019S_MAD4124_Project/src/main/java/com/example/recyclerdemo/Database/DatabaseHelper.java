@@ -321,4 +321,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return contacts;
     }
 
+
+    public List<Note> searchcategory(String keyword) {
+        List<Note> cat = null;
+        try {
+            SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+            Cursor cursor = sqLiteDatabase.rawQuery("select * from " + Note.TABLE_NAME + " where " + Note.COLUMN_CATEGORY + " like ?", new String[] { "%" + keyword + "%" });
+
+            cat = new ArrayList<Note>();
+            if (cursor.moveToFirst()) {
+                do {
+                    Note nd = new Note();
+                    nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
+                    nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
+
+                    cat.add(nd);
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception e) {
+            cat = null;
+        }
+        return cat;
+    }
 }
