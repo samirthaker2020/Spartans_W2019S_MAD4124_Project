@@ -57,6 +57,9 @@ private int stuff=0;
         //Get the bundle
         Bundle bundle = getIntent().getExtras();
           sc = (SearchView) findViewById(R.id.notes_search);
+        sc.setFocusable(true);
+        sc.requestFocus();
+        sc.requestFocusFromTouch();
 //Extract the data…
 
             stuff = bundle.getInt("categoryid");
@@ -65,12 +68,13 @@ private int stuff=0;
         Note n=db.getNote(stuff);
         getSupportActionBar().setSubtitle(n.getCategory());
         notesdetailsList.addAll(db.getNoteDetails(stuff));
+        sc.setQueryHint("Enter Title");
         //  cid.setText(Integer.toString(stuff));
        // System.out.println(notesdetailsList.get(2));
 //data();
         mAdapter = new RcNotes_Adpater(notesdetailsList,this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+   //     lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
         //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
         lstallnoteData.setHasFixedSize(true);
@@ -147,6 +151,7 @@ private int stuff=0;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.addnotesmenu, menu);
         return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -185,7 +190,7 @@ private int stuff=0;
 
             mAdapter = new RcNotes_Adpater(contacts,this);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-            lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+      //      lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
             // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
             //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
             lstallnoteData.setHasFixedSize(true);
@@ -197,7 +202,7 @@ private int stuff=0;
         {
            // contacts.clear();
             //mAdapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(),"No Data Found",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"No Notes Found",Toast.LENGTH_SHORT).show();
             // mAdapter = new RcNotes_Adpater(notesdetailsList,this);
 //
            // mAdapter.notifyDataSetChanged();
@@ -209,7 +214,7 @@ private int stuff=0;
     {
         mAdapter = new RcNotes_Adpater(notesdetailsList,this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+      //  lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
         //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
         lstallnoteData.setHasFixedSize(true);

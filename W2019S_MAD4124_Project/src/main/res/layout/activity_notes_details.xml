@@ -10,7 +10,16 @@
     <SearchView
         android:id="@+id/notes_search"
         android:layout_width="400dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="5dp"
+        android:accessibilityLiveRegion="assertive"
+        android:background="@drawable/mysearch"
+        android:layerType="software"
+        android:visibility="visible">
 
     </SearchView>
 
