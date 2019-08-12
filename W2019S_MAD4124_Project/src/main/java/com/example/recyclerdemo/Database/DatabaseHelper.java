@@ -300,26 +300,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             SQLiteDatabase sqLiteDatabase = getReadableDatabase();
             Cursor cursor = sqLiteDatabase.rawQuery("select * from " + NoteDetails.TABLE_NAME + " where " + NoteDetails.COLUMN_NOTETITLE + " like ?", new String[] { "%" + keyword + "%" });
-            if (cursor.moveToFirst()) {
+
                 contacts = new ArrayList<NoteDetails>();
+            if (cursor.moveToFirst()) {
                 do {
-                    if (cursor != null)
-                        cursor.moveToFirst();
-
-                    // prepare note object
-                    NoteDetails note = new NoteDetails(
-                            cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)),
-                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)),
-                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)),
-                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)),
-                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)),
-                            cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)
-
-                            )
-                    );
-                    contacts.add(note);
+                    NoteDetails nd = new NoteDetails();
+                    nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
+                    nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
+                    nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
+                    nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                    nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
+                     nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                    contacts.add(nd);
                 } while (cursor.moveToNext());
             }
+
         } catch (Exception e) {
             contacts = null;
         }

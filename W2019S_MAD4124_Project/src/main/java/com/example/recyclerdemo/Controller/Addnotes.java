@@ -147,7 +147,7 @@ private EditText ndetails;
                             Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
                             bitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 30, stream);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream);
                             byte[] byte_arr = stream.toByteArray();
                             img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 
@@ -187,7 +187,8 @@ private EditText ndetails;
                 } else {
                     Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                    bitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream);
                     byte[] byte_arr = stream.toByteArray();
                     img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 
@@ -294,7 +295,9 @@ private EditText ndetails;
 
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+       myBitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.8), (int)(myBitmap.getHeight()*0.8), true);
+
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
         File wallpaperDirectory = new File(
                 Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
         // have the object build the directory structure, if needed.
