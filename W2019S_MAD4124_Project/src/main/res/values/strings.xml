@@ -9,5 +9,7 @@
     <string name="search">search</string>
     <string name="addnotes">AddNotes</string>
     <string name="delete">Delete</string>
+    <string name="SortByTitle" />
+    <string name="SortByDate" />
 
 </resources>

@@ -187,6 +187,62 @@ private int stuff=0;
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 NavUtils.navigateUpTo(this, intent);
                 return true;
+
+            case R.id.sortnotesbytitle:
+                notesdetailsList=db.getsortbytitle(stuff,"DESC");
+                mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+                //  lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+                //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+                lstallnoteData.setHasFixedSize(true);
+                lstallnoteData.setLayoutManager(mLayoutManager);
+                lstallnoteData.setItemAnimator(new DefaultItemAnimator());
+                lstallnoteData.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.sortnotesbytitle1:
+                notesdetailsList=db.getsortbytitle(stuff,"ASC");
+                mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+                RecyclerView.LayoutManager mLayoutManager1 = new GridLayoutManager(this, 1);
+                //  lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+                //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+                lstallnoteData.setHasFixedSize(true);
+                lstallnoteData.setLayoutManager(mLayoutManager1);
+                lstallnoteData.setItemAnimator(new DefaultItemAnimator());
+                lstallnoteData.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.sortnotesbydate:
+                notesdetailsList=db.getsortbytitle(stuff,"DESC");
+                mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+                RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, 1);
+                //  lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+                //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+                lstallnoteData.setHasFixedSize(true);
+                lstallnoteData.setLayoutManager(mLayoutManager2);
+                lstallnoteData.setItemAnimator(new DefaultItemAnimator());
+                lstallnoteData.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.sortnotesbydate1:
+                notesdetailsList=db.getsortbytitle(stuff,"ASC");
+                mAdapter = new RcNotes_Adpater(notesdetailsList,this);
+                RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(this, 1);
+                //  lstallnoteData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                // lstcategoryData.setLayoutManager(new GridLayoutManager(this, 2));
+                //  lstcategoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
+                lstallnoteData.setHasFixedSize(true);
+                lstallnoteData.setLayoutManager(mLayoutManager3);
+                lstallnoteData.setItemAnimator(new DefaultItemAnimator());
+                lstallnoteData.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

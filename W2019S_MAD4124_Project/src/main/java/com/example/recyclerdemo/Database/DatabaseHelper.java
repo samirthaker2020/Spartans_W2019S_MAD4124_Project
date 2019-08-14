@@ -228,7 +228,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(NoteDetails.TABLE_NAME,
                 new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
                 NoteDetails.COLUMN_CATEGORY + "=?",
-                new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_ID+" " +"DESC", null);
+                new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_NOTETITLE+" " +"ASC", null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -349,4 +349,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cat;
     }
+
+    public List<NoteDetails> getsortbytitle(long id,String a) {
+        List<NoteDetails> notesdetails1 = new ArrayList<>();
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(NoteDetails.TABLE_NAME,
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                NoteDetails.COLUMN_CATEGORY + "=?",
+                new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_NOTETITLE+" " +a, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                NoteDetails nd = new NoteDetails();
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
+                nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
+                nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
+                nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
+                nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                notesdetails1.add(nd);
+            } while (cursor.moveToNext());
+        }
+
+        // close the db connection
+        cursor.close();
+
+        return notesdetails1;
+    }
+
+
+    public List<NoteDetails> getsortbydate(long id,String a) {
+        List<NoteDetails> notesdetails1 = new ArrayList<>();
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(NoteDetails.TABLE_NAME,
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                NoteDetails.COLUMN_CATEGORY + "=?",
+                new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_NOTEDATE+" " +a, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                NoteDetails nd = new NoteDetails();
+                nd.setId(cursor.getInt(cursor.getColumnIndex(NoteDetails.COLUMN_ID)));
+                nd.setCategory(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_CATEGORY)));
+                nd.setNotetitle(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)));
+                nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
+                nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
+                nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                notesdetails1.add(nd);
+            } while (cursor.moveToNext());
+        }
+
+        // close the db connection
+        cursor.close();
+
+        return notesdetails1;
+    }
+
+
+
 }
