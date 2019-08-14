@@ -186,7 +186,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long insertNotedetails(String cid,String title,String ndetails, String img_str) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
-
+        LocalDateTime myDateObj = LocalDateTime.now();
+        // System.out.println("Before formatting: " + myDateObj);
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDate = myDateObj.format(myFormatObj);
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
@@ -197,12 +200,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
            values.put(NoteDetails.COLUMN_NOTETITLE,title);
            values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
           values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
+           values.put(NoteDetails.COLUMN_NOTEDATE,formattedDate);
        }else
        {
            values.put(NoteDetails.COLUMN_CATEGORY, cid);
            values.put(NoteDetails.COLUMN_NOTETITLE,title);
            values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
            values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
+           values.put(NoteDetails.COLUMN_NOTEDATE,formattedDate);
        }
 
         // insert row
@@ -223,7 +228,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(NoteDetails.TABLE_NAME,
                 new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
                 NoteDetails.COLUMN_CATEGORY + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
+                new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_ID+" " +"DESC", null);
 
         if (cursor.moveToFirst()) {
             do {
