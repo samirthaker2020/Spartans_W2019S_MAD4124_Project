@@ -76,6 +76,7 @@ private EditText ndetails;
     private NoteDetails editnodtemodal;
     private double lati;
     private double longi;
+    Bitmap bitmap;
     private String fulladd;
     private static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
@@ -204,15 +205,23 @@ private EditText ndetails;
                     }
                 else
             {
+
                 if (addimageview.getDrawable() == null) {
                     img_str = "NULL";
+
                 } else {
-                    Bitmap bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream);
-                    byte[] byte_arr = stream.toByteArray();
-                    img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+
+                    try {
+                        bitmap = ((BitmapDrawable) addimageview.getDrawable()).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream);
+                        byte[] byte_arr = stream.toByteArray();
+                        img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+                    }catch(Exception e){
+                        img_str = "NULL";
+                    }
+
 
                 }
                 getLocation();
