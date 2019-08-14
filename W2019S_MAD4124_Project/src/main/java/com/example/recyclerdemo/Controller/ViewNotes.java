@@ -60,7 +60,7 @@ public ImageView imagefornotes;
       imagefornotes= (ImageView) findViewById(R.id.imageView31);
         imagefornotes.setImageBitmap(StringToBitMap(ndd.getNoteimage()));
         TextView txtdate= (TextView) findViewById(R.id.lbldate);
-        txtdate.setText("Last Modified on"+" "+ndd.getNotedate());
+        txtdate.setText("Last Modified on"+" "+ndd.getNotedate()+"\n"+ndd.getFulldaaress());
         entext(false);
 
 

@@ -183,7 +183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return notesdetails;
     }
 
-    public long insertNotedetails(String cid,String title,String ndetails, String img_str) {
+    public long insertNotedetails(String cid,String title,String ndetails, String img_str,double lati,double longi,String fulladd) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
         LocalDateTime myDateObj = LocalDateTime.now();
@@ -193,7 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
-       if(img_str==null)
+       if(img_str==null )
        {
            Log.d("image",img_str);
            values.put(NoteDetails.COLUMN_CATEGORY, cid);
@@ -201,6 +201,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
            values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
           values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
            values.put(NoteDetails.COLUMN_NOTEDATE,formattedDate);
+           values.put(NoteDetails.COLUMN_LATITUDE,lati);
+           values.put(NoteDetails.COLUMN_LONGITUDE,longi);
+           values.put(NoteDetails.COLUMN_FULLADDRESS,fulladd);
        }else
        {
            values.put(NoteDetails.COLUMN_CATEGORY, cid);
@@ -208,6 +211,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
            values.put(NoteDetails.COLUMN_NOTEDETAILS,ndetails);
            values.put(NoteDetails.COLUMN_NOTEIMAGE,img_str);
            values.put(NoteDetails.COLUMN_NOTEDATE,formattedDate);
+           values.put(NoteDetails.COLUMN_LATITUDE,lati);
+           values.put(NoteDetails.COLUMN_LONGITUDE,longi);
+           values.put(NoteDetails.COLUMN_FULLADDRESS,fulladd);
+     System.out.println(lati);
+           System.out.println(longi);
+           System.out.println(fulladd);
        }
 
         // insert row
@@ -226,7 +235,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(NoteDetails.TABLE_NAME,
-                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE,NoteDetails.COLUMN_FULLADDRESS},
                 NoteDetails.COLUMN_CATEGORY + "=?",
                 new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_NOTETITLE+" " +"ASC", null);
 
@@ -239,6 +248,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
                 nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
                  nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                nd.setFulldaaress(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_FULLADDRESS)));
                 notesdetails1.add(nd);
             } while (cursor.moveToNext());
         }
@@ -253,7 +263,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(NoteDetails.TABLE_NAME,
-                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE,NoteDetails.COLUMN_FULLADDRESS,NoteDetails.COLUMN_LONGITUDE,NoteDetails.COLUMN_LATITUDE},
                 NoteDetails.COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -267,7 +277,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTETITLE)),
                 cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)),
                 cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)),
-                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE))
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)),
+                cursor.getDouble(cursor.getColumnIndex(NoteDetails.COLUMN_LATITUDE)),
+                cursor.getDouble(cursor.getColumnIndex(NoteDetails.COLUMN_LONGITUDE)),
+                cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_FULLADDRESS))
         );
         // close the db connection
         cursor.close();
@@ -293,6 +306,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(NoteDetails.COLUMN_NOTEDETAILS, note.getNotedetails());
         values.put(NoteDetails.COLUMN_NOTEIMAGE, note.getNoteimage());
         values.put(NoteDetails.COLUMN_NOTEDATE,formattedDate);
+        values.put(NoteDetails.COLUMN_LATITUDE,note.getLatitude());
+        values.put(NoteDetails.COLUMN_LONGITUDE,note.getLongitude());
+        values.put(NoteDetails.COLUMN_FULLADDRESS,note.getFulldaaress());
 
         // updating row
         return db.update(NoteDetails.TABLE_NAME, values, NoteDetails.COLUMN_ID + " = ?",
@@ -316,6 +332,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
                     nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
                      nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                             nd.setFulldaaress(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_FULLADDRESS)));
+
                     contacts.add(nd);
                 } while (cursor.moveToNext());
             }
@@ -356,7 +374,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(NoteDetails.TABLE_NAME,
-                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE,NoteDetails.COLUMN_FULLADDRESS},
                 NoteDetails.COLUMN_CATEGORY + "=?",
                 new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_NOTETITLE+" " +a, null);
 
@@ -369,6 +387,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
                 nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
                 nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                nd.setFulldaaress(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_FULLADDRESS)));
                 notesdetails1.add(nd);
             } while (cursor.moveToNext());
         }
@@ -386,7 +405,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(NoteDetails.TABLE_NAME,
-                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE},
+                new String[]{NoteDetails.COLUMN_ID, NoteDetails.COLUMN_CATEGORY,NoteDetails.COLUMN_NOTETITLE,NoteDetails.COLUMN_NOTEDETAILS,NoteDetails.COLUMN_NOTEDATE,NoteDetails.COLUMN_NOTEIMAGE,NoteDetails.COLUMN_FULLADDRESS},
                 NoteDetails.COLUMN_CATEGORY + "=?",
                 new String[]{String.valueOf(id)}, null, null, NoteDetails.COLUMN_NOTEDATE+" " +a, null);
 
@@ -399,6 +418,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 nd.setNotedetails(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDETAILS)));
                 nd.setNotedate(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEDATE)));
                 nd.setNoteimage(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_NOTEIMAGE)));
+                nd.setFulldaaress(cursor.getString(cursor.getColumnIndex(NoteDetails.COLUMN_FULLADDRESS)));
                 notesdetails1.add(nd);
             } while (cursor.moveToNext());
         }

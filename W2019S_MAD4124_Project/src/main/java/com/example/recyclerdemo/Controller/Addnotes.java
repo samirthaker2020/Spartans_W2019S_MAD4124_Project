@@ -3,6 +3,7 @@ package com.example.recyclerdemo.Controller;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,12 +12,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,8 +56,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 
@@ -65,6 +74,12 @@ private EditText ndetails;
     private ImageView addimageview;
     private int editnotes;
     private NoteDetails editnodtemodal;
+    private double lati;
+    private double longi;
+    private String fulladd;
+    private static final int REQUEST_LOCATION = 1;
+    LocationManager locationManager;
+
     String img_str;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +110,13 @@ private EditText ndetails;
             ndetails.setText(editnodtemodal.getNotedetails());
             addimageview.setImageBitmap(StringToBitMap(editnodtemodal.getNoteimage()));
         }
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
 
+        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            getLocation();
+        }
       //  addimageview.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             btnaddimage.setOnClickListener(new View.OnClickListener() {
@@ -151,10 +172,11 @@ private EditText ndetails;
                             byte[] byte_arr = stream.toByteArray();
                             img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 
+
                         }
 
-
-                        db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString(), img_str);
+                        getLocation();
+                        db.insertNotedetails(Integer.toString(cid), title.getText().toString(), ndetails.getText().toString(), img_str,lati,longi,fulladd);
 
                         title.setText("");
                         ndetails.setText("");
@@ -193,11 +215,15 @@ private EditText ndetails;
                     img_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
 
                 }
+                getLocation();
                      NoteDetails enote=new NoteDetails();
                             enote.setId(editnotes);
                             enote.setNotedetails(ndetails.getText().toString());
                             enote.setNotetitle(title.getText().toString());
                             enote.setNoteimage(img_str);
+                            enote.setFulldaaress(fulladd);
+                            enote.setLatitude(lati);
+                            enote.setLongitude(longi);
 
                        db.updateNotedetails(enote);
                 AlertDialog alertDialog = new AlertDialog.Builder(Addnotes.this).create();
@@ -362,4 +388,83 @@ private EditText ndetails;
                 takePhotoFromCamera();
             }
         }}
+
+
+    private void getLocation() {
+        DecimalFormat df = new DecimalFormat("#.######");
+        if (ActivityCompat.checkSelfPermission(Addnotes.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (Addnotes.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(Addnotes.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+            if (location2 != null) {
+                double latti = Double.parseDouble(df.format(location2.getLatitude()));
+                double longi = Double.parseDouble(df.format(location2.getLongitude()));
+                setAddress(latti, longi);
+            } else if (location1 != null) {
+                double latti = Double.parseDouble(df.format(location1.getLatitude()));
+                double longi = Double.parseDouble(df.format(location1.getLongitude()));
+                setAddress(latti, longi);
+            } else if (location != null) {
+                double latti = Double.parseDouble(df.format(location.getLatitude()));
+                double longi = Double.parseDouble(df.format(location.getLongitude()));
+                setAddress(latti, longi);
+            } else {
+                Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    protected void buildAlertMessageNoGps() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please Turn ON your GPS Connection")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void setAddress(Double latitude, Double longitude) {
+
+        Geocoder geocoder;
+        List<Address>  addresses = null;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses.size() > 0) {
+            Log.d("max", " " + addresses.get(0).getMaxAddressLineIndex());
+
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+             String postalcode=addresses.get(0).getPostalCode();
+            fulladd = city+", "+state+", "+country+","+postalcode;
+            lati=latitude;
+            longi=longitude;
+            Log.d("fulladd",fulladd);
+        }
+    }
 }

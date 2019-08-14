@@ -7,8 +7,8 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:layout_width="361dp"
-        android:layout_height="129dp"
+        android:layout_width="376dp"
+        android:layout_height="196dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@android:color/holo_orange_light"
@@ -36,43 +36,46 @@
                 android:maxLines="4"
                 android:text="TextView"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="142dp"
-                android:layout_height="119dp"
+                android:layout_width="138dp"
+                android:layout_height="110dp"
                 android:layout_marginTop="16dp"
 
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginBottom="8dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/ndatetime"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.134"
+                app:layout_constraintVertical_bias="1.0"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/ndatetime"
-                android:layout_width="192dp"
-                android:layout_height="60dp"
+                android:layout_width="347dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:ellipsize="none"
                 android:lines="4"
+                android:maxLines="100"
+                android:scrollHorizontally="false"
                 android:singleLine="false"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_primary"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView2"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ntitle"
                 app:layout_constraintVertical_bias="1.0" />
