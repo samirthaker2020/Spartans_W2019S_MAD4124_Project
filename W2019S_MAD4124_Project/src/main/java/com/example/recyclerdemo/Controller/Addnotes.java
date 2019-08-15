@@ -412,13 +412,13 @@ private EditText ndetails;
 
             Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+          //  Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
-            if (location2 != null) {
+        /*   if (location2 != null) {
                 double latti = Double.parseDouble(df.format(location2.getLatitude()));
                 double longi = Double.parseDouble(df.format(location2.getLongitude()));
                 setAddress(latti, longi);
-            } else if (location1 != null) {
+            } else */ if (location1 != null) {
                 double latti = Double.parseDouble(df.format(location1.getLatitude()));
                 double longi = Double.parseDouble(df.format(location1.getLongitude()));
                 setAddress(latti, longi);
