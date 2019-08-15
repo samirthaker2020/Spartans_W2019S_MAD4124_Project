@@ -3,6 +3,7 @@ package com.example.recyclerdemo.Controller;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.example.recyclerdemo.Adapter.RcNotes_Adpater;
 import com.example.recyclerdemo.Adapter.Rc_Adapter;
 import com.example.recyclerdemo.Database.DatabaseHelper;
+import com.example.recyclerdemo.Maps.MapsActivity;
 import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Modal.NoteDetails;
 import com.example.recyclerdemo.Modal.RcModal;
@@ -168,6 +170,15 @@ private int stuff=0;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.view_on_map:
+                Intent intent11 = new Intent(this, MapsActivity.class);
+                Bundle bundle11 = new Bundle();
+                //bundle11.putParcelableArrayList("mylist", (ArrayList<? extends Parcelable>) notesdetailsList);
+
+                bundle11.putInt("cat",stuff);
+intent11.putExtras(bundle11);
+                this.startActivity(intent11);
+                return true;
             case R.id.addnotes:
                 //Write your code
                 Intent i=new Intent(this, Addnotes.class);

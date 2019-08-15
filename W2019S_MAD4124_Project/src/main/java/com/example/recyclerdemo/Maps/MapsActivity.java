@@ -3,6 +3,8 @@ package com.example.recyclerdemo.Maps;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.example.recyclerdemo.Database.DatabaseHelper;
+import com.example.recyclerdemo.Modal.NoteDetails;
 import com.example.recyclerdemo.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,11 +13,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 private double lati,longi;
 private String fulladd;
+private int stuff=0;
+    ArrayList<NoteDetails> not= new ArrayList<NoteDetails>();
+private DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +32,21 @@ private String fulladd;
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Bundle bundle = getIntent().getExtras();
-        lati= bundle.getDouble("lati");
-        longi= bundle.getDouble("longi");
-        fulladd= bundle.getString("fulladd");
+        db = new DatabaseHelper(this);
+        if(bundle.containsKey("lati") || bundle.containsKey("longi")||bundle.containsKey("fulladd")){
+            lati= bundle.getDouble("lati");
+            longi= bundle.getDouble("longi");
+            fulladd= bundle.getString("fulladd");
+        }
+        else {
+            stuff=bundle.getInt("cat");
+
+            not.addAll(db.getNoteDetails(stuff));
+
+        }
+
+
+
     }
 
 
@@ -47,11 +66,22 @@ private String fulladd;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
+if(stuff==0) {
+    // Add a marker in Sydney and move the camera
+    LatLng sydney = new LatLng(lati, longi);
+    mMap.addMarker(new MarkerOptions().position(sydney).title(fulladd));
+    mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14));
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(lati, longi);
-        mMap.addMarker(new MarkerOptions().position(sydney).title(fulladd));
+}else {
+    for(NoteDetails n:not)
+    {
+        System.out.println(n.getLongitude());
+        LatLng sydney = new LatLng(n.getLatitude(), n.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(sydney).title(n.getFulldaaress()));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,14));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 9));
+    }
+}
     }
 }

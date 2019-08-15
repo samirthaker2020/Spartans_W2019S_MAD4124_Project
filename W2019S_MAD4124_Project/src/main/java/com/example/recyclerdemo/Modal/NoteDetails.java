@@ -1,8 +1,12 @@
 package com.example.recyclerdemo.Modal;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class NoteDetails {
+public class NoteDetails implements Serializable {
     public static final String TABLE_NAME = "notesdetails";
 
     public static final String COLUMN_ID = "id";
@@ -152,5 +156,8 @@ public class NoteDetails {
                     + COLUMN_LONGITUDE + " TEXT NULL,"
                     + COLUMN_FULLADDRESS + " TEXT NULL"
                     + ")";
+
+
+
 
 }
