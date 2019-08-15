@@ -11,5 +11,6 @@
     <string name="delete">Delete</string>
     <string name="SortByTitle" />
     <string name="SortByDate" />
+    <string name="title_activity_maps">Map</string>
 
 </resources>

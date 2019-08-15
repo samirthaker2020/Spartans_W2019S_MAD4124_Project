@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recyclerdemo.Database.DatabaseHelper;
+import com.example.recyclerdemo.Maps.MapsActivity;
 import com.example.recyclerdemo.Modal.Note;
 import com.example.recyclerdemo.Modal.NoteDetails;
 import com.example.recyclerdemo.R;
@@ -97,6 +98,22 @@ public ImageView imagefornotes;
 
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
+            case R.id.viewnotes_maps:
+                Intent i10 = new Intent(ViewNotes.this, MapsActivity.class);
+
+
+//Create the bundle
+                Bundle bundle10 = new Bundle();
+
+//Add your data to bundle
+                bundle10.putDouble("lati", ndd.getLatitude());
+                bundle10.putDouble("longi", ndd.getLongitude());
+                bundle10.putString("fulladd", ndd.getFulldaaress());
+
+//Add the bundle to the intent
+                i10.putExtras(bundle10);
+                startActivity(i10);
+                return true;
             case android.R.id.home:
 
                 Intent intent = NavUtils.getParentActivityIntent(this);
